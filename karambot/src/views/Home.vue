@@ -12,6 +12,6 @@ export default {
   name: 'home',
   components: {
     vueChat
-  },
+  }
 }
 </script>
