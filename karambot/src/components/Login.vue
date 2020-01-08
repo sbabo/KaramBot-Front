@@ -1,6 +1,6 @@
 <template>
   <div class="middle">
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+    <b-form @submit="onSend" @reset="onReset" v-if="show">
       <b-form-group
         id="input-group-1"
         label="Email address:"
@@ -41,7 +41,14 @@
   height: 100vh;
 }
 </style>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
 <script>
+import axios from 'axios';
+
   export default {
     data() {
       return {
@@ -72,6 +79,14 @@
         this.$nextTick(() => {
           this.show = true
         })
+      },
+      onSend(evt) {
+        axios
+        .post('http://127.0.0.1:8000/calcul', {
+        email : "test@gmail.com",
+        username : 'test'
+      })
+    .then(response => (console.log(this.info = response.data)))
       }
     }
   }
