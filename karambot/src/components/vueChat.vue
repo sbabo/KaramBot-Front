@@ -10,7 +10,7 @@
     </div>
   </header>
 
-  <main class="msger-chat">
+  <main class="msger-chat" id="main">
     <div class="msg left-msg">
       <div
        class="msg-img"
@@ -41,7 +41,7 @@
           <div class="msg-info-time">12:46</div>
         </div>
 
-        <div class="msg-text">
+        <div id="msgText" class="msg-text">
             ok boomer
         </div>
       </div>
@@ -49,15 +49,18 @@
   </main>
 
   <form class="msger-inputarea">
-    <input  v-model="msgInput" type="text" class="msger-input" placeholder="Message...">
+    <input id="msgUser" v-model="msgInput" type="text" class="msger-input" placeholder="Message...">
     <button type="submit" @click="onSubmit" class="msger-send-btn">Envoyer</button>
   </form>
 </section>
 </div>
 </template>
 
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
 // https://codepen.io/sajadhsm/pen/odaBdd
+import axios from 'axios';
+const apiURL = 'http://127.0.0.1:8000/calcul';
 export default {
 
   name: 'vueChat',
@@ -67,27 +70,56 @@ export default {
 
    data: function () {
        return {
-         msgInput: ''
+         msgInput: '',
+         test: 1,
+         output: '',
+         repBot: '',
        }
    },
 
+   /*async created() {
+     try {
+       const res = await axios.get(apiURL)
+
+       this.repBot = res.data;
+     } catch (e) {
+       console.error(e);
+     }
+   },*/
+
   methods: {
       onSubmit(evt) {
-          const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
-          const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
-          const BOT_NAME = "BOT";
-          const PERSON_NAME = "Utilisateur";
-          evt.preventDefault();
 
-         const msgText = this.msgInput;
-         if (!msgText) return;
+        const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
+        const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
+        const BOT_NAME = "BOT";
+        const PERSON_NAME = "Utilisateur";
+        evt.preventDefault();
 
-         appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
-         this.msgInput = "";
+        // Value from the input
+        var msgTextTyped = document.getElementById("msgUser").value;
 
+        document.getElementById('main').innerHTML += 
+        "<div class='msg right-msg'><div class='msg-img' style='background-image: url(https://image.flaticon.com/icons/svg/145/145867.svg)'></div>" +
+        "<div class='msg-bubble'><div class='msg-info'><div class='msg-info-name'>Utilisateur</div><div class='msg-info-time'>12:46</div></div>" +
+        "<div id='msgText' class='msg-text'>"+ msgTextTyped +"</div></div></div>";
+
+        /*const msgText = this.msgInput;
+        if (!msgText) return;*/
+        //appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
+        //this.msgInput = "";
+
+        let currentObj = this;
+        this.axios.post('http://127.0.0.1:8000/calcul', {
+          //msgInput: this.msgInput,
+          msgTextTyped,
+          test: 'test msg'
+        }).then(response => (console.log(this.info = response.data)))
+
+        /* const res = await axios.post(apiURL, { operande1: this.msgInput });
+
+         this.repBot = [...this.repBot, res.data];*/
       }
-      
-
   }
 }
 </script>
