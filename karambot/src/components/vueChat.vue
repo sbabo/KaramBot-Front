@@ -96,18 +96,20 @@ export default {
         const PERSON_NAME = "Utilisateur";
         evt.preventDefault();
 
-        // Value from the input
+        // Valeur directement prise de l'input
         var msgTextTyped = document.getElementById("msgUser").value;
 
+        // On affecte directement le main en insérant la nouvelle box de dialogue
         document.getElementById('main').innerHTML += 
-        "<div class='msg right-msg'><div class='msg-img' style='background-image: url(https://image.flaticon.com/icons/svg/145/145867.svg)'></div>" +
-        "<div class='msg-bubble'><div class='msg-info'><div class='msg-info-name'>Utilisateur</div><div class='msg-info-time'>12:46</div></div>" +
+        "<div class='msg right-msg'><div class='msg-img' style='background-image: url("+ PERSON_IMG + ")'></div>" +
+        "<div class='msg-bubble'><div class='msg-info'><div class='msg-info-name'>"+ PERSON_NAME + "</div><div class='msg-info-time'>12:46</div></div>" +
         "<div id='msgText' class='msg-text'>"+ msgTextTyped +"</div></div></div>";
 
-        /*const msgText = this.msgInput;
-        if (!msgText) return;*/
-        //appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
-        //this.msgInput = "";
+        // Test affichage avec le bot (ne pas prendre en compte)
+        document.getElementById('main').innerHTML += 
+        "<div class='msg left-msg'><div class='msg-img' style='background-image: url("+ BOT_IMG + ")'></div>" +
+        "<div class='msg-bubble'><div class='msg-info'><div class='msg-info-name'>"+ BOT_NAME + "</div><div class='msg-info-time'>12:46</div></div>" +
+        "<div id='msgText' class='msg-text'> blipbloup je n'ai pas compris ta commande blipblop </div></div></div>";
 
         let currentObj = this;
         this.axios.post('http://127.0.0.1:8000/calcul', {
