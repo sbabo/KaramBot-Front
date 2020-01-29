@@ -34,14 +34,11 @@
 <script>
 // https://codepen.io/sajadhsm/pen/odaBdd
 import axios from 'axios';
-const apiURL = 'http://127.0.0.1:8000/calcul';
 export default {
   name: 'vueChat',
   data: () => ({
     message: "",
     messages: [],
-    info: '',
-    infos: [],
     player: {
       user_name: "a",
       life: "",
@@ -76,19 +73,55 @@ export default {
         })
 
         // Valeur directement prise de l'input
-        var user_name = document.getElementById("msgUser").value;
+        //ovar user_name = document.getElementById("msgUser").value;
 
-        let currentObj = this;
-        axios.post("http://127.0.0.1:8000/player", {
-          user_name = this.message,
-          test: 'test msg'
+        const [commande, user_name, newzone] = this.message.split(' ')
+        
+        if(commande == "player") {
+          console.log(user_name)
+          axios.post("http://127.0.0.1:8000/player", {
+          user_name
         }).then(response => {
           this.messages.push({
-            text: "Nom : " + response.data.user_name + "  -  Agilité : " + response.data.agility,
+            text: "Nom : " + response.data.user_name + " - " + "Agilité : " + response.data.agility,
             author: 'server'
           })
-          })  
-
+          }) 
+        } else if(commande == "zone"){
+          axios.post("http://127.0.0.1:8000/player/zoneactuel", {
+          user_name
+        }).then(response => {
+          this.messages.push({
+            text: "Nom : " + user_name + "  -  Zone : " + response.data.zoneactuel,
+            author: 'server'
+          })
+          }) 
+        } else if(commande == "changezone") {
+          console.log(newzone)
+          axios.post("http://127.0.0.1:8000/player/changezone", {
+          user_name,
+          newzone
+        }).then(response => {
+          this.messages.push({
+            text: "Nom : " + user_name + "  -  " + response.data.zoneactuel + " : " + newzone,
+            author: 'server'
+          })
+          }) 
+        } else if(commande == "findfight") {
+          axios.post("http://127.0.0.1:8000/player/findfight", {
+          user_name
+        }).then(response => {
+          this.messages.push({
+            text: "Nom : " + user_name + "  -  " + response.data.reponse + " - " + response.data.monster + " : " + response.data.monsterlife + " pv",
+            author: 'server'
+          })
+          }) 
+        }else {
+          this.messages.push({
+            text: "Commande non reconnue",
+            author: 'server'
+          })
+        }
       }
   }
 }
@@ -129,7 +162,7 @@ body {
   flex-flow: column wrap;
   justify-content: space-between;
   text-align: center;
-  width: 750px;
+  width: 800px;
   max-width: 950px;
   margin: -90px;
   height: 900px;
