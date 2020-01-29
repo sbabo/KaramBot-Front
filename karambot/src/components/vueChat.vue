@@ -116,12 +116,21 @@ export default {
             author: 'server'
           })
           }) 
-        }else {
+        } else if(commande == "randomBlague") {
+          axios.get("http://127.0.0.1:8001/polls").then(response => {
+          this.messages.push({
+            text: response.data.blague,
+            author: 'server'
+          })
+          }) 
+        }
+        else {
           this.messages.push({
             text: "Commande non reconnue",
             author: 'server'
           })
         }
+        this.message = ''
       }
   }
 }
