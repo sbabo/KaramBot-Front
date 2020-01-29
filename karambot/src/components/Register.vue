@@ -1,6 +1,6 @@
 <template>
   <div class="middle">
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+    <b-form @submit="Register" @reset="onReset" @cancel="onCancel" v-if="show">
       <b-form-group
         id="input-group-1"
         label="Username :"
@@ -8,7 +8,7 @@
       >
         <b-form-input
           id="input-1"
-          v-model="form.email"
+          v-model="form.username"
           type="text"
           required
           placeholder="Choose an username..."
@@ -22,7 +22,7 @@
         description="We'll never share your email with anyone else."
       >
         <b-form-input
-          id="input-1"
+          id="input-2"
           v-model="form.email"
           type="email"
           required
@@ -32,7 +32,7 @@
 
       <b-form-group id="input-group-3" label="Password:" label-for="input-3">
         <b-form-input
-          id="input-2"
+          id="input-3"
           v-model="form.password"
           type="password"
           required
@@ -42,7 +42,7 @@
 
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
-      <b-button type="register" variant="">Cancel</b-button>
+      <b-button type="cancel" v-on:click="onCancel" variant="">Cancel</b-button>
     </b-form>
   </div>
 </template>
@@ -56,6 +56,7 @@
 }
 </style>
 <script>
+import axios from 'axios'
   export default {
     data() {
       return {
@@ -80,12 +81,23 @@
         this.form.email = ''
         this.form.password = ''
         this.form.username = ''
-        this.form.checked = []
         // Trick to reset/clear native browser form validation state
         this.show = false
         this.$nextTick(() => {
           this.show = true
         })
+      },
+      Register(evt) {
+        axios.post('http://127.0.0.1:8000/player/register', {
+          user_name: this.form.username,
+          email: this.form.email,
+          password: this.form.password
+        })
+        .then(response => (console.log(this.info = response.data)))
+        this.$router.push({name: "login"});
+      },
+      onCancel(evt) {
+        this.$router.push({name: "login"});
       }
     }
   }

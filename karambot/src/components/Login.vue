@@ -28,7 +28,7 @@
 
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
-      <b-button type="register" variant="">Register</b-button>
+      <b-button type="register" v-on:click="goRegister" variant="">Register</b-button>
     </b-form>
   </div>
 </template>
@@ -44,7 +44,6 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
 
 <script>
 import axios from 'axios';
@@ -72,8 +71,6 @@ import axios from 'axios';
         // Reset our form values
         this.form.email = ''
         this.form.password = ''
-        this.form.food = null
-        this.form.checked = []
         // Trick to reset/clear native browser form validation state
         this.show = false
         this.$nextTick(() => {
@@ -82,12 +79,16 @@ import axios from 'axios';
       },
       onSend(evt) {
         axios
-        .post('http://127.0.0.1:8000/calcul', {
+        .post('http://127.0.0.1:8000/player/login', {
         email : "test@gmail.com",
-        username : 'test'
+        password : 'test'
       })
     .then(response => (console.log(this.info = response.data)))
+      },
+      goRegister(evt) {
+        this.$router.push({name: "register"});
       }
     }
   }
+
 </script>
