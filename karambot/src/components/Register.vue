@@ -1,6 +1,6 @@
 <template>
   <div class="middle">
-    <b-form @submit="Register" @reset="onReset" @cancel="onCancel" v-if="show">
+    <b-form @reset="onReset" @cancel="onCancel" v-if="show">
       <b-form-group
         id="input-group-1"
         label="Username :"
@@ -40,10 +40,11 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button type="submit" v-on:click="Register" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
-      <b-button type="cancel" v-on:click="onCancel" variant="">Cancel</b-button>
+      <b-button type="cancel" v-on:click="onCancel" variant="" v-b-modal="'my-modal'">Cancel</b-button>
     </b-form>
+      <b-modal ref="my-modal">{{this.infos.user}}</b-modal>
   </div>
 </template>
 
@@ -64,10 +65,9 @@ import axios from 'axios'
           username: '',
           email: '',
           password: '',
-          food: null,
-          checked: []
         },
-        show: true
+        show: true,
+        infos: [],
       }
     },
     methods: {
@@ -93,11 +93,20 @@ import axios from 'axios'
           email: this.form.email,
           password: this.form.password
         })
-        .then(response => (console.log(this.info = response.data)))
-        this.$router.push({name: "login"});
+        .then(response => {
+          this.infos = response.data
+          if(this.infos) {
+            this.$router.push({name: "login"})
+          } else {
+            this.showModal()
+          }
+        })
       },
       onCancel(evt) {
         this.$router.push({name: "login"});
+      },
+      showModal() {
+        this.$refs['my-modal'].show()
       }
     }
   }

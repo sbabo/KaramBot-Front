@@ -3,16 +3,15 @@
     <b-form @submit="onSend" @reset="onReset" v-if="show">
       <b-form-group
         id="input-group-1"
-        label="Email address:"
+        label="Username :"
         label-for="input-1"
-        description="We'll never share your email with anyone else."
-      >
+        >
         <b-form-input
           id="input-1"
-          v-model="form.email"
-          type="email"
+          v-model="form.username"
+          type="text"
           required
-          placeholder="Enter email"
+          placeholder="Enter your username"
         ></b-form-input>
       </b-form-group>
 
@@ -30,6 +29,8 @@
       <b-button type="reset" variant="danger">Reset</b-button>
       <b-button type="register" v-on:click="goRegister" variant="">Register</b-button>
     </b-form>
+      <b-modal ref="my-modal">{{this.info.user}}</b-modal>
+
   </div>
 </template>
 
@@ -52,13 +53,12 @@ import axios from 'axios';
     data() {
       return {
         form: {
-          email: '',
+          username: '',
           password: '',
-          food: null,
-          checked: []
         },
-        foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-        show: true
+        show: true,
+        info: "",
+        infos: []
       }
     },
     methods: {
@@ -69,7 +69,7 @@ import axios from 'axios';
       onReset(evt) {
         evt.preventDefault()
         // Reset our form values
-        this.form.email = ''
+        this.form.username = ''
         this.form.password = ''
         // Trick to reset/clear native browser form validation state
         this.show = false
@@ -78,15 +78,27 @@ import axios from 'axios';
         })
       },
       onSend(evt) {
+        const infos = this
         axios
         .post('http://127.0.0.1:8000/player/login', {
-        email : "test@gmail.com",
-        password : 'test'
+        user_name : this.form.username,
+        password : this.form.password
       })
-    .then(response => (console.log(this.info = response.data)))
+    .then(response => {
+      this.infos = response.data,
+      console.log(this.infos)
+      if(this.infos) {
+        this.$router.push({name: "chat", params: this.infos})
+      } else {
+        this.showModal()
+      }
+    })
       },
       goRegister(evt) {
         this.$router.push({name: "register"});
+      },
+      showModal() {
+        this.$refs['my-modal'].show()
       }
     }
   }
