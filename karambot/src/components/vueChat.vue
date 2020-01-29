@@ -123,6 +123,11 @@ export default {
             author: 'server'
           })
           }) 
+        } else if(commande == "help") {
+          this.messages.push({
+            text: "player [user_name] / zone [user_name] / changezone [user_name] [zone] / findfight [user_name]",
+            author: 'server'
+          })
         }
         else {
           this.messages.push({
