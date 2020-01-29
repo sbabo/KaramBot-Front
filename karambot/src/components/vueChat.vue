@@ -15,7 +15,7 @@
       <ul class="chat-box-list">
         <li class="msg" v-for="(message, idx) in messages" :key=idx :class="message.author">
           <p>
-            <span>{{ message.text }}</span>
+              <span>{{ message.text }}</span>
           </p>
         </li>
       </ul>
@@ -83,7 +83,7 @@ export default {
           user_name
         }).then(response => {
           this.messages.push({
-            text: "Nom : " + response.data.user_name + " - " + "Agilité : " + response.data.agility,
+            text: "Nom : " + response.data.user_name + " - " + "Vie : " + response.data.life + " - " + "Force : " + response.data.strength + " - " + "Agilité : " + response.data.agility + " - " + "Intelligence : " + response.data.intelligence,
             author: 'server'
           })
           }) 
